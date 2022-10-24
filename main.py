@@ -17,9 +17,9 @@ HtmlText = requests.get('https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5
 Soup = BeautifulSoup(HtmlText, 'lxml')
 CranesCountFinder = Soup.find('div', class_='message-inner')
 CranesCountNickAndDateFinder = CranesCountFinder.find('div', class_='message-userContent').text
-DateFinder = re.search(r'\D{3} \d{2}, \d{4}', CranesCountNickAndDateFinder)
-Date = datetime.strptime(DateFinder, '%m-%d-%Y').date()
-print(DateFinder)
+DateFinder = re.search(r'\D{3} \d+, \d{4}', CranesCountNickAndDateFinder)
+Date = datetime.strptime(DateFinder, '%b %-d %Y').date()
+print(Date)
 # for DataFinder in CranesCountFinder:
 #     print(DataFinder)
 
