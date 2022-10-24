@@ -1,10 +1,8 @@
-import bs4
 from bs4 import BeautifulSoup
 import requests
 import lxml
-import cloudscraper
-import IndeedClient
-
+from datetime import datetime
+import re
 
 headers = {
 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
@@ -14,19 +12,14 @@ headers = {
 'DNT' : '1', # Do Not Track Request Header
 'Connection' : 'close'
 }
-scraper = cloudscraper.create_scraper(delay=100000, browser='chrome')
-url = "https://www.gov.pl/web/finanse/sprawozdanie-roczne-za-2021"
-info = scraper.get(url).text
-soup = BeautifulSoup(info, "html.parser")
-#soup = soup.find_all('script')
-#print(soup)
-#page = requests.get(url,headers=headers).content
-#soup = BeautifulSoup(requests.get(url, headers=headers, allow_redirects=False).content, 'html.parser')
-#soup = bs4.BeautifulSoup(page, 'lxml')
-#print(soup)
 
+HtmlText = requests.get('https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5%BBurawie-w-naszym-mie%C5%9Bcie.503734/page-2').text
+Soup = BeautifulSoup(HtmlText, 'lxml')
+CranesCountFinder = Soup.find('div', class_='message-inner')
+CranesCountNickAndDateFinder = CranesCountFinder.find('div', class_='message-userContent').text
+DateFinder = re.search(r'\D{3} \d{2}, \d{4}', CranesCountNickAndDateFinder)
+Date = datetime.strptime(DateFinder, '%m-%d-%Y').date()
+print(DateFinder)
+# for DataFinder in CranesCountFinder:
+#     print(DataFinder)
 
-# HtmlText = requests.get(url).text
-# soup = BeautifulSoup(HtmlText, 'lxml')
-jobs = soup.find('div', class_ = 'editor-content').text
-print(jobs)
