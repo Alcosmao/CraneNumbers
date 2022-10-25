@@ -13,7 +13,7 @@ headers = {
 'Connection' : 'close'
 }
 
-HtmlText = requests.get('https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5%BBurawie-w-naszym-mie%C5%9Bcie.503734/page-5').text
+HtmlText = requests.get('https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5%BBurawie-w-naszym-mie%C5%9Bcie.503734/page-9').text
 Soup = BeautifulSoup(HtmlText, 'lxml')
 CranesCountFinders = Soup.find_all('article', class_='message message--post js-post js-inlineModContainer california-message')
 for CranesCountFinder in CranesCountFinders:
@@ -21,20 +21,21 @@ for CranesCountFinder in CranesCountFinders:
     if 'Suma' in CranesCountFinderNumber:
         CranesPostNickFinder = CranesCountFinder.find('a', class_='username').text
         CranesPostDate = CranesCountFinder.find('time', class_='u-dt').text
-        CranesExactNumber = re.findall(r"\d{3}", CranesCountFinderNumber)
-        CranesExactNumber = '\n'.join(CranesExactNumber)
+        CranesExactNumber = re.findall(r"\d+", CranesCountFinderNumber)
+        CranesExactNumber = str(max(map(int, CranesExactNumber)))
+        # CranesExactNumber = '\n'.join(CranesExactNumber)
         print("This data is provided by: " + CranesPostNickFinder)
         print("Date of the post: " + CranesPostDate)
         print("Number of cranes at the post time: " + CranesExactNumber)
     if 'Razem' in CranesCountFinderNumber:
         CranesPostNickFinder = CranesCountFinder.find('a', class_='username').text
         CranesPostDate = CranesCountFinder.find('time', class_='u-dt').text
-        CranesExactNumber = re.findall(r"\d{3}", CranesCountFinderNumber)
-        CranesExactNumber = '\n'.join(CranesExactNumber)
+        CranesExactNumber = re.findall(r"\d{+}", CranesCountFinderNumber)
+        CranesExactNumber = str(max(map(int, CranesExactNumber)))
+        # CranesExactNumber = '\n'.join(CranesExactNumber)
         print("This data is provided by: " + CranesPostNickFinder)
         print("Date of the post: " + CranesPostDate)
         print("Number of cranes at the post time: " + CranesExactNumber)
-
 
 
 
