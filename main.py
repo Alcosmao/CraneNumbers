@@ -15,11 +15,18 @@ headers = {
 
 HtmlText = requests.get('https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5%BBurawie-w-naszym-mie%C5%9Bcie.503734/page-4').text
 Soup = BeautifulSoup(HtmlText, 'lxml')
-CranesCountFinder = Soup.find('article', class_='message message--post js-post js-inlineModContainer california-message')
-CranesPostNickFinder = CranesCountFinder.find('a', class_ ='username').text
-print("This data is provided by: " + CranesPostNickFinder)
-CranesCountFinderNumber = Soup.find('div', class_='bbWrapper')
-print(CranesCountFinderNumber)
+CranesCountFinders = Soup.find_all('article', class_='message message--post js-post js-inlineModContainer california-message')
+for CranesCountFinder in CranesCountFinders:
+    CranesPostNickFinder = CranesCountFinder.find('a', class_ ='username').text
+    CranesPostDate = CranesCountFinder.find('time', class_='u-dt').text
+    CranesCountFinderNumber = CranesCountFinder.find('div', class_='bbWrapper').text
+
+
+
+    print("This data is provided by: " + CranesPostNickFinder)
+    print("Date of the post: " + CranesPostDate)
+    print(CranesCountFinderNumber)
+    print("#"*76)
 
 
 # DateFinder = re.search(r'\D{3} \d+, \d{4}', CranesCountNickAndDateFinder)
