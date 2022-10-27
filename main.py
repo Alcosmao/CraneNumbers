@@ -13,10 +13,13 @@ headers = {
 'Connection' : 'close'
 }
 
+
 def PrintingCraneInformation(CranesPostNickFinder, CranesPostDate, CranesExactNumber):
     print("This data is provided by: " + CranesPostNickFinder)
     print("Date of the post: " + CranesPostDate)
     print("Number of cranes at the post time: " + CranesExactNumber)
+    print("#"*100)
+
 
 WordRange = ["Suma", "Razem"]
 HtmlText = requests.get('https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5%BBurawie-w-naszym-mie%C5%9Bcie.503734/page-2').text
