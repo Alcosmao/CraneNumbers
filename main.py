@@ -13,35 +13,28 @@ headers = {
 'Connection' : 'close'
 }
 
-HtmlText = requests.get('https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5%BBurawie-w-naszym-mie%C5%9Bcie.503734/page-9').text
+def PrintingCraneInformation(CranesPostNickFinder, CranesPostDate, CranesExactNumber):
+    print("This data is provided by: " + CranesPostNickFinder)
+    print("Date of the post: " + CranesPostDate)
+    print("Number of cranes at the post time: " + CranesExactNumber)
+
+WordRange = ["Suma", "Razem"]
+HtmlText = requests.get('https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5%BBurawie-w-naszym-mie%C5%9Bcie.503734/page-2').text
 Soup = BeautifulSoup(HtmlText, 'lxml')
 CranesCountFinders = Soup.find_all('article', class_='message message--post js-post js-inlineModContainer california-message')
 for CranesCountFinder in CranesCountFinders:
     CranesCountFinderNumber = CranesCountFinder.find('div', class_='bbWrapper').text
-    if 'Suma' in CranesCountFinderNumber:
+    if any(CraneNumber in CranesCountFinderNumber for CraneNumber in WordRange):
         CranesPostNickFinder = CranesCountFinder.find('a', class_='username').text
         CranesPostDate = CranesCountFinder.find('time', class_='u-dt').text
         CranesExactNumber = re.findall(r"\d+", CranesCountFinderNumber)
-        CranesExactNumber = str(max(map(int, CranesExactNumber)))
-        # CranesExactNumber = '\n'.join(CranesExactNumber)
-        print("This data is provided by: " + CranesPostNickFinder)
-        print("Date of the post: " + CranesPostDate)
-        print("Number of cranes at the post time: " + CranesExactNumber)
-    if 'Razem' in CranesCountFinderNumber:
-        CranesPostNickFinder = CranesCountFinder.find('a', class_='username').text
-        CranesPostDate = CranesCountFinder.find('time', class_='u-dt').text
-        CranesExactNumber = re.findall(r"\d{+}", CranesCountFinderNumber)
-        CranesExactNumber = str(max(map(int, CranesExactNumber)))
-        # CranesExactNumber = '\n'.join(CranesExactNumber)
-        print("This data is provided by: " + CranesPostNickFinder)
-        print("Date of the post: " + CranesPostDate)
-        print("Number of cranes at the post time: " + CranesExactNumber)
+        CranesExactNumber = str(max(map(int, CranesExactNumber), default=0))
+        PrintingCraneInformation(CranesPostNickFinder, CranesPostDate, CranesExactNumber)
 
 
 
     # print(CranesCountFinderNumber)
     # print("#"*76)
-
 
 # DateFinder = re.search(r'\D{3} \d+, \d{4}', CranesCountNickAndDateFinder)
 # Date = datetime.strptime(DateFinder, '%b %-d %Y').date()
