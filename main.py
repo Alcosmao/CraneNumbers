@@ -3,6 +3,8 @@ import requests
 import lxml
 from datetime import datetime
 import re
+from time import sleep
+from random import randint
 
 headers = {
 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
@@ -22,17 +24,26 @@ def PrintingCraneInformation(CranesPostNickFinder, CranesPostDate, CranesExactNu
 
 
 WordRange = ["Suma", "Razem"]
-HtmlText = requests.get('https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5%BBurawie-w-naszym-mie%C5%9Bcie.503734/page-2').text
-Soup = BeautifulSoup(HtmlText, 'lxml')
-CranesCountFinders = Soup.find_all('article', class_='message message--post js-post js-inlineModContainer california-message')
-for CranesCountFinder in CranesCountFinders:
-    CranesCountFinderNumber = CranesCountFinder.find('div', class_='bbWrapper').text
-    if any(CraneNumber in CranesCountFinderNumber for CraneNumber in WordRange):
-        CranesPostNickFinder = CranesCountFinder.find('a', class_='username').text
-        CranesPostDate = CranesCountFinder.find('time', class_='u-dt').text
-        CranesExactNumber = re.findall(r"\d+", CranesCountFinderNumber)
-        CranesExactNumber = str(max(map(int, CranesExactNumber), default=0))
-        PrintingCraneInformation(CranesPostNickFinder, CranesPostDate, CranesExactNumber)
+HtmlText = 'https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5%BBurawie-w-naszym-mie%C5%9Bcie.503734/page-'
+Repeat = True
+while Repeat:
+    for page in range(2, 180):
+        req = requests.get(HtmlText + str(page))
+        soup = BeautifulSoup(req.text, 'lxml')
+        CranesCountFinders = soup.find_all('article', class_='message message--post js-post js-inlineModContainer california-message')
+        for CranesCountFinder in CranesCountFinders:
+            CranesCountFinderNumber = CranesCountFinder.find('div', class_='bbWrapper').text
+            if any(CraneNumber in CranesCountFinderNumber for CraneNumber in WordRange):
+                CranesPostNickFinder = CranesCountFinder.find('a', class_='username').text
+                CranesPostDate = CranesCountFinder.find('time', class_='u-dt').text
+                CranesExactNumber = re.findall(r"\d+", CranesCountFinderNumber)
+                CranesExactNumber = str(max(map(int, CranesExactNumber), default=0))
+                PrintingCraneInformation(CranesPostNickFinder, CranesPostDate, CranesExactNumber)
+        #sleep(randint(2, 5))
+    Repeat = input("Ask again: Yes/ No: ")
+    if Repeat != "Yes":
+        break
+print("Good bye.")
 
 
 
