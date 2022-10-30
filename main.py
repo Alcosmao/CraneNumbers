@@ -21,8 +21,15 @@ def PrintingCraneInformation(CranesExactNumber):
     print("#"*100)
 
 
-def CraneNumberFinder(CranesCountFinderNumber):
-    pass
+def CranesNumberFinder(CranesCountFinderNumber):
+    CranesExactNumber = re.findall(r"Razem: \d+", CranesCountFinderNumber)
+    CranesExactNumber = str(CranesExactNumber)
+    CranesExactNumber = re.findall(r"\d+", CranesExactNumber)
+    CranesExactNumber = str(max(map(int, CranesExactNumber), default=0))
+    print("Number of cranes at the post time: " + CranesExactNumber)
+
+def Test():
+    print("Kupa")
 
 
 def CranesDateFinder(CranesCountFinder):
@@ -41,7 +48,7 @@ WordRange = ["Suma", "Razem", "="]
 HtmlText = 'https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5%BBurawie-w-naszym-mie%C5%9Bcie.503734/page-'
 Repeat = True
 while Repeat:
-    for page in range(2, 4):
+    for page in range(160, 183):
         req = requests.get(HtmlText + str(page))
         soup = BeautifulSoup(req.text, 'lxml')
         CranesCountFinders = soup.find_all('article', class_='message message--post js-post js-inlineModContainer california-message')
@@ -50,9 +57,7 @@ while Repeat:
             if any(CraneNumber in CranesCountFinderNumber for CraneNumber in WordRange):
                 CranesNickFinder(CranesCountFinder)
                 CranesDateFinder(CranesCountFinder)
-                CranesExactNumber = re.findall(r"\d+", CranesCountFinderNumber)
-                CranesExactNumber = str(max(map(int, CranesExactNumber), default=0))
-                PrintingCraneInformation(CranesExactNumber)
+                CranesNumberFinder(CranesCountFinderNumber)
         #sleep(randint(2, 5))
     Repeat = input("Ask again: Yes/ No: ")
     if Repeat != "Yes":
