@@ -22,13 +22,16 @@ def PrintingCraneInformation(CranesExactNumber):
 
 
 def CranesNumberFinderTest(CranesCountFinderNumber):
-    CraneRegex = r"(?:Razem|Suma|=):? (\d+)"
+    CraneRegex = r"(Razem|Suma|=).?.? (\d+)"
     CranesExactNumber = re.findall(CraneRegex, CranesCountFinderNumber)
     CranesExactLen = len(CranesExactNumber)
     CranesValue = CranesExactNumber[0] if CranesExactLen == 1 else CranesExactNumber[-1]
     print("Number of cranes at the post time: " + str(CranesValue))
-
-
+####
+# (?:Razem|Suma|=):? (\d+)
+###
+# (Razem|Suma|=).?.? (\d+)
+###
 def CranesDateFinder(CranesCountFinder):
     CranesFindDate = CranesCountFinder.find('div', class_='message-attribution-main')
     CranesPostDate = CranesFindDate.find('time')['data-date-string']
@@ -44,7 +47,7 @@ WordRange = ["Suma", "Razem", "="]
 HtmlText = 'https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5%BBurawie-w-naszym-mie%C5%9Bcie.503734/page-'
 Repeat = True
 while Repeat:
-    for page in range(5, 6):
+    for page in range(4, 183):
         req = requests.get(HtmlText + str(page))
         soup = BeautifulSoup(req.text, 'lxml')
         CranesCountFinders = soup.find_all('article', class_='message message--post js-post js-inlineModContainer california-message')
