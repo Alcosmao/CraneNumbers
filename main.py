@@ -24,9 +24,10 @@ def PrintingCraneInformation(CranesExactNumber):
 def CranesNumberFinderTest(CranesCountFinderNumber):
     CraneRegex = r"(Razem|Suma|=).?.? (\d+)"
     CranesExactNumber = re.findall(CraneRegex, CranesCountFinderNumber)
-    CranesExactLen = len(CranesExactNumber)
-    CranesValue = CranesExactNumber[0] if CranesExactLen == 1 else CranesExactNumber[-1]
-    print("Number of cranes at the post time: " + str(CranesValue))
+    CranesValue = CranesExactNumber[0]
+    # CranesExactLen = len(CranesExactNumber)
+    # CranesValue = CranesExactNumber[0] if CranesExactLen == 1 else CranesExactNumber[-1]
+    print("Number of cranes at the post time: " + str(CranesValue[1]))
 ####
 # (?:Razem|Suma|=):? (\d+)
 ###
@@ -43,7 +44,7 @@ def CranesNickFinder(CranesCountFinder):
     print("This data is provided by: " + CranesPostNickFinder)
 
 
-WordRange = ["Suma", "Razem", "="]
+WordRange = "Razem"
 HtmlText = 'https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5%BBurawie-w-naszym-mie%C5%9Bcie.503734/page-'
 Repeat = True
 while Repeat:
