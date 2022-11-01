@@ -22,12 +22,15 @@ def PrintingCraneInformation(CranesExactNumber):
 
 
 def CranesNumberFinderTest(CranesCountFinderNumber):
-    CraneRegex = r"(Razem|Suma|=).?.? (\d+)"
-    CranesExactNumber = re.findall(CraneRegex, CranesCountFinderNumber)
-    CranesValue = CranesExactNumber[0]
-    # CranesExactLen = len(CranesExactNumber)
-    # CranesValue = CranesExactNumber[0] if CranesExactLen == 1 else CranesExactNumber[-1]
-    print("Number of cranes at the post time: " + str(CranesValue[1]))
+    try:
+        CraneRegex = r"(Razem|Suma|=).?.? (\d+)"
+        CranesExactNumber = re.findall(CraneRegex, CranesCountFinderNumber)
+        CranesValue = CranesExactNumber[0]
+        # CranesExactLen = len(CranesExactNumber)
+        # CranesValue = CranesExactNumber[0] if CranesExactLen == 1 else CranesExactNumber[-1]
+        print("Number of cranes at the post time: " + str(CranesValue[1]))
+    except:
+        print("Wrong value")
 ####
 # (?:Razem|Suma|=):? (\d+)
 ###
@@ -44,20 +47,25 @@ def CranesNickFinder(CranesCountFinder):
     print("This data is provided by: " + CranesPostNickFinder)
 
 
-WordRange = "Razem"
+WordRange = ["Razem", "Suma", "="]
+WordRangeRazem = "Razem"
+WordRangeSuma = "Suma"
 HtmlText = 'https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5%BBurawie-w-naszym-mie%C5%9Bcie.503734/page-'
 Repeat = True
 while Repeat:
-    for page in range(4, 183):
+    for page in range(2, 183):
         req = requests.get(HtmlText + str(page))
         soup = BeautifulSoup(req.text, 'lxml')
         CranesCountFinders = soup.find_all('article', class_='message message--post js-post js-inlineModContainer california-message')
         for CranesCountFinder in CranesCountFinders:
             CranesCountFinderNumber = CranesCountFinder.find('div', class_='bbWrapper').text
+            # if WordRangeRazem or WordRangeSuma in CranesCountFinderNumber:
+            # if any(CraneNumber in CranesCountFinderNumber for CraneNumber in WordRange):
             if any(CraneNumber in CranesCountFinderNumber for CraneNumber in WordRange):
                 CranesNickFinder(CranesCountFinder)
                 CranesDateFinder(CranesCountFinder)
                 CranesNumberFinderTest(CranesCountFinderNumber)
+                print("This is page number: " +str(page))
                 print("#@"*30)
         #sleep(randint(2, 5))
     Repeat = input("Ask again: Yes/ No: ")
