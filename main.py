@@ -5,6 +5,7 @@ from datetime import datetime
 import re
 from time import sleep
 from random import randint
+import pandas as pd
 
 headers = {
 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
@@ -16,12 +17,24 @@ headers = {
 }
 
 
+def ExportDataToDataFrame(CranesNickFinder, CranesDateFinder, CranesNumberFinder):
+    pass
+    with open('dataFrame.txt', 'a') as file:
+        file.write()
+    col = ['Nick', 'Date', 'Crane Number']
+    lst = [CranesNickFinder, CranesDateFinder, CranesNumberFinder]
+    dataFrame = pd.DataFrame(columns= col)
+    row = [CranesNickFinder, CranesDateFinder, CranesNumberFinder]
+    for row in lst:
+        dataFrame.append()
+    print(dataFrame)
+
 def PrintingCraneInformation(CranesExactNumber):
     print("Number of cranes at the post time: " + CranesExactNumber)
     print("#"*100)
 
 
-def CranesNumberFinderTest(CranesCountFinderNumber):
+def CranesNumberFinder(CranesCountFinderNumber):
     try:
         CraneRegex = r"(Razem|Suma|=).?.? (\d+)"
         CranesExactNumber = re.findall(CraneRegex, CranesCountFinderNumber)
@@ -36,6 +49,8 @@ def CranesNumberFinderTest(CranesCountFinderNumber):
 ###
 # (Razem|Suma|=).?.? (\d+)
 ###
+
+
 def CranesDateFinder(CranesCountFinder):
     CranesFindDate = CranesCountFinder.find('div', class_='message-attribution-main')
     CranesPostDate = CranesFindDate.find('time')['data-date-string']
@@ -59,19 +74,17 @@ while Repeat:
         CranesCountFinders = soup.find_all('article', class_='message message--post js-post js-inlineModContainer california-message')
         for CranesCountFinder in CranesCountFinders:
             CranesCountFinderNumber = CranesCountFinder.find('div', class_='bbWrapper').text
-            # if WordRangeRazem or WordRangeSuma in CranesCountFinderNumber:
-            # if any(CraneNumber in CranesCountFinderNumber for CraneNumber in WordRange):
             if any(CraneNumber in CranesCountFinderNumber for CraneNumber in WordRange):
                 CranesNickFinder(CranesCountFinder)
                 CranesDateFinder(CranesCountFinder)
-                CranesNumberFinderTest(CranesCountFinderNumber)
+                CranesNumberFinder(CranesCountFinderNumber)
+                ExportDataToDataFrame(CranesNickFinder, CranesDateFinder, CranesNumberFinder)
                 print("This is page number: " +str(page))
                 print("#@"*30)
-        #sleep(randint(2, 5))
+        sleep(randint(2, 5))
     Repeat = input("Ask again: Yes/ No: ")
     if Repeat != "Yes":
         break
 print("Good bye.")
 
-lambda x: "Razem" or "Suma" or "=" in x
 
