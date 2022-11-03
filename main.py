@@ -19,19 +19,17 @@ headers = {
 
 def ExportDataToDataFrame(CranesNickFinder, CranesDateFinder, CranesNumberFinder):
     pass
-    with open('dataFrame.txt', 'a') as file:
-        file.write()
+    # with open('dataFrame.txt', 'a') as file:
+        # file.write()
     col = ['Nick', 'Date', 'Crane Number']
-    lst = [CranesNickFinder, CranesDateFinder, CranesNumberFinder]
-    dataFrame = pd.DataFrame(columns= col)
-    row = [CranesNickFinder, CranesDateFinder, CranesNumberFinder]
-    for row in lst:
-        dataFrame.append()
-    print(dataFrame)
-
-def PrintingCraneInformation(CranesExactNumber):
-    print("Number of cranes at the post time: " + CranesExactNumber)
-    print("#"*100)
+    bscList = []
+    lstToAdd = [CranesNickFinder, CranesDateFinder, CranesNumberFinder]
+    bscList.extend(lstToAdd)
+    print(bscList)
+    # bscList.append(lstToAdd)
+    # dataFrame = pd.DataFrame(bscList, columns=col)
+    # dataFrame = dataFrame.append(pd.DataFrame([lstToAdd], columns=dataFrame.columns), ignore_index=True)
+    # print(dataFrame)
 
 
 def CranesNumberFinder(CranesCountFinderNumber):
@@ -42,6 +40,7 @@ def CranesNumberFinder(CranesCountFinderNumber):
         # CranesExactLen = len(CranesExactNumber)
         # CranesValue = CranesExactNumber[0] if CranesExactLen == 1 else CranesExactNumber[-1]
         print("Number of cranes at the post time: " + str(CranesValue[1]))
+        return CranesValue[1]
     except:
         print("Wrong value")
 ####
@@ -55,11 +54,13 @@ def CranesDateFinder(CranesCountFinder):
     CranesFindDate = CranesCountFinder.find('div', class_='message-attribution-main')
     CranesPostDate = CranesFindDate.find('time')['data-date-string']
     print("Date of the post: " + CranesPostDate)
+    return CranesPostDate
 
 
 def CranesNickFinder(CranesCountFinder):
     CranesPostNickFinder = CranesCountFinder.find('a', class_='username').text
     print("This data is provided by: " + CranesPostNickFinder)
+    return CranesPostNickFinder
 
 
 WordRange = ["Razem", "Suma", "="]
@@ -78,9 +79,9 @@ while Repeat:
                 CranesNickFinder(CranesCountFinder)
                 CranesDateFinder(CranesCountFinder)
                 CranesNumberFinder(CranesCountFinderNumber)
-                ExportDataToDataFrame(CranesNickFinder, CranesDateFinder, CranesNumberFinder)
                 print("This is page number: " +str(page))
                 print("#@"*30)
+                ExportDataToDataFrame(CranesNickFinder, CranesDateFinder, CranesNumberFinder)
         sleep(randint(2, 5))
     Repeat = input("Ask again: Yes/ No: ")
     if Repeat != "Yes":
