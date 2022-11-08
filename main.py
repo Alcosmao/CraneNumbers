@@ -6,6 +6,7 @@ import re
 from time import sleep
 from random import randint
 import pandas as pd
+import csv
 
 headers = {
 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
@@ -18,16 +19,33 @@ headers = {
 
 
 def ExportDataToDataFrame(CranesCountFinder, CranesCountFinder2, CranesCountFinderNumber):
-    x = CranesNickFinder(CranesCountFinder)
-    y = CranesDateFinder(CranesCountFinder2)
-    z = CranesNumberFinder(CranesCountFinderNumber)
-    generalList = []
-    lst = [x, y, z]
+    try:
+        x = CranesNickFinder(CranesCountFinder)
+        y = CranesDateFinder(CranesCountFinder2)
+        z = CranesNumberFinder(CranesCountFinderNumber)
+        lst = []
+        lst.append(x)
+        lst.append(y)
+        lst.append(z)
+        print(lst)
+        # header = ['Nick', 'Date', 'CraneNumber']
+        with open('newData', 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerows(lst)
+    except:
+        print("Error")
 
-    col = ['Nick', 'Date', 'Crane Number']
-    dataFrame = pd.DataFrame([generalList], columns=col)
-    dataFrame = dataFrame.append(pd.DataFrame(lst, columns=col), ignore_index=True)
-    print(dataFrame)
+    # col = ['Nick', 'Date', 'Crane Number']
+    # dataFrame = pd.DataFrame([generalList], columns=col)
+    # dataFrame = dataFrame.append(pd.DataFrame(lst, columns=col), ignore_index=True)
+    # print(dataFrame)
+
+
+def createCsvFile():
+    header = ['Nick', 'Date', 'CraneNumber']
+    with open('newData', 'w', encoding='UTF8') as file:
+        writer = csv.writer(file)
+        writer.writerow(header)
 
 
 def CranesNumberFinder(CranesCountFinderNumber):
@@ -85,11 +103,14 @@ def CraneGatherData():
 
 
 def Main():
+    createCsvFile()
     CraneGatherData()
     ExportDataToDataFrame()
+    # saveDataToDataFrame(ExportDataToDataFrame)
 
 
 Main()
+
 
 
 # if __name__ == "__main__":
