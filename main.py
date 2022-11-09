@@ -20,18 +20,19 @@ headers = {
 
 def ExportDataToDataFrame(CranesCountFinder, CranesCountFinder2, CranesCountFinderNumber):
     try:
-        x = CranesNickFinder(CranesCountFinder)
-        y = CranesDateFinder(CranesCountFinder2)
-        z = CranesNumberFinder(CranesCountFinderNumber)
-        lst = []
-        lst.append(x)
-        lst.append(y)
-        lst.append(z)
-        print(lst)
-        # header = ['Nick', 'Date', 'CraneNumber']
-        with open('newData', 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerows(lst)
+            x = CranesNickFinder(CranesCountFinder)
+            y = CranesDateFinder(CranesCountFinder2)
+            z = CranesNumberFinder(CranesCountFinderNumber)
+            for condition in z:
+                if condition is not None:
+                    lst = [x, y, z]
+                    print(lst)
+                    # header = ['Nick', 'Date', 'CraneNumber']
+                    with open('newData', 'a', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow(lst)
+                else:
+                    continue
     except:
         print("Error")
 
@@ -103,7 +104,7 @@ def CraneGatherData():
 
 
 def Main():
-    createCsvFile()
+    # createCsvFile()
     CraneGatherData()
     ExportDataToDataFrame()
     # saveDataToDataFrame(ExportDataToDataFrame)
