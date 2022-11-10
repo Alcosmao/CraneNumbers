@@ -24,22 +24,16 @@ def ExportDataToDataFrame(CranesCountFinder, CranesCountFinder2, CranesCountFind
             y = CranesDateFinder(CranesCountFinder2)
             z = CranesNumberFinder(CranesCountFinderNumber)
             for condition in z:
-                if condition is not None:
+                if not condition:
+                    continue
+                else:
                     lst = [x, y, z]
                     print(lst)
-                    # header = ['Nick', 'Date', 'CraneNumber']
                     with open('newData', 'a', newline='') as file:
                         writer = csv.writer(file)
                         writer.writerow(lst)
-                else:
-                    continue
     except:
         print("Error")
-
-    # col = ['Nick', 'Date', 'Crane Number']
-    # dataFrame = pd.DataFrame([generalList], columns=col)
-    # dataFrame = dataFrame.append(pd.DataFrame(lst, columns=col), ignore_index=True)
-    # print(dataFrame)
 
 
 def createCsvFile():
