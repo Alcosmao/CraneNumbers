@@ -23,7 +23,9 @@ def ExportDataToDataFrame(CranesCountFinder, CranesCountFinder2, CranesCountFind
             x = CranesNickFinder(CranesCountFinder)
             y = CranesDateFinder(CranesCountFinder2)
             z = CranesNumberFinder(CranesCountFinderNumber)
-            if z is not None or z > 10:
+            z = int(z)
+            # if z is not None:
+            if z > 20:
                 lst = [x, y, z]
                 print(lst)
                 with open('newData', 'a', newline='') as file:
@@ -74,7 +76,7 @@ def CraneGatherData():
     HtmlText = 'https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5%BBurawie-w-naszym-mie%C5%9Bcie.503734/page-'
     Repeat = True
     while Repeat:
-        for page in range(2, 183):
+        for page in range(2, 184):
             req = requests.get(HtmlText + str(page))
             soup = BeautifulSoup(req.text, 'lxml')
             CranesCountFinders = soup.find_all('article', class_='message message--post js-post js-inlineModContainer california-message')
@@ -95,10 +97,7 @@ def CraneGatherData():
 
 
 def Main():
-    # createCsvFile()
     CraneGatherData()
-    # ExportDataToDataFrame()
-    # saveDataToDataFrame(ExportDataToDataFrame)
 
 
 Main()
