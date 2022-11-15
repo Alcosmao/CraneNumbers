@@ -23,15 +23,12 @@ def ExportDataToDataFrame(CranesCountFinder, CranesCountFinder2, CranesCountFind
             x = CranesNickFinder(CranesCountFinder)
             y = CranesDateFinder(CranesCountFinder2)
             z = CranesNumberFinder(CranesCountFinderNumber)
-            for condition in z:
-                if not condition:
-                    continue
-                else:
-                    lst = [x, y, z]
-                    print(lst)
-                    with open('newData', 'a', newline='') as file:
-                        writer = csv.writer(file)
-                        writer.writerow(lst)
+            if z is not None or z > 10:
+                lst = [x, y, z]
+                print(lst)
+                with open('newData', 'a', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(lst)
     except:
         print("Error")
 
@@ -100,7 +97,7 @@ def CraneGatherData():
 def Main():
     # createCsvFile()
     CraneGatherData()
-    ExportDataToDataFrame()
+    # ExportDataToDataFrame()
     # saveDataToDataFrame(ExportDataToDataFrame)
 
 
