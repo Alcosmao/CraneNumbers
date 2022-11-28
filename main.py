@@ -25,7 +25,7 @@ def ExportDataToDataFrame(CranesCountFinder, CranesCountFinder2, CranesCountFind
             z = CranesNumberFinder(CranesCountFinderNumber)
             z = int(z)
             # if z is not None:
-            if z > 20:
+            if z > 25:
                 lst = [x, y, z]
                 print(lst)
                 with open('newData', 'a', newline='') as file:
@@ -33,6 +33,10 @@ def ExportDataToDataFrame(CranesCountFinder, CranesCountFinder2, CranesCountFind
                     writer.writerow(lst)
     except:
         print("Error")
+
+
+def dateTimeConverter():
+    pass
 
 
 def createCsvFile():
@@ -89,7 +93,7 @@ def CraneGatherData():
                     ExportDataToDataFrame(CranesCountFinder, CranesCountFinder, CranesCountFinderNumber)
                     print("This is page number: " +str(page))
                     print("#@"*30)
-            sleep(randint(2, 5))
+            #sleep(randint(2, 5))
         Repeat = input("Ask again: Yes/ No: ")
         if Repeat != "Yes":
             break
