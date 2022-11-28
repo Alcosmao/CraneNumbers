@@ -21,7 +21,7 @@ headers = {
 def ExportDataToDataFrame(CranesCountFinder, CranesCountFinder2, CranesCountFinderNumber):
     try:
             x = CranesNickFinder(CranesCountFinder)
-            y = CranesDateFinder(CranesCountFinder2)
+            y = dateTimeConverter(CranesDateFinder(CranesCountFinder2))
             z = CranesNumberFinder(CranesCountFinderNumber)
             z = int(z)
             # if z is not None:
@@ -35,8 +35,8 @@ def ExportDataToDataFrame(CranesCountFinder, CranesCountFinder2, CranesCountFind
         print("Error")
 
 
-def dateTimeConverter():
-    pass
+def dateTimeConverter(y):
+    return datetime.strptime(y, '%b %d, %Y').strftime('%Y-%m-%d')
 
 
 def createCsvFile():
