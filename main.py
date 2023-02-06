@@ -7,6 +7,9 @@ from time import sleep
 from random import randint
 import pandas as pd
 import csv
+import pyodbc
+
+import sqlQuery
 
 headers = {
 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
@@ -17,6 +20,11 @@ headers = {
 'Connection' : 'close'
 }
 
+cnxn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
+                          "Server=DERDMPC\SQLEXPRESS;"
+                          "Database=wroSkyscrapers;"
+                          "Trusted_Connection=yes;")
+
 
 def ExportDataToDataFrame(CranesCountFinder, CranesCountFinder2, CranesCountFinderNumber):
     try:
@@ -24,13 +32,13 @@ def ExportDataToDataFrame(CranesCountFinder, CranesCountFinder2, CranesCountFind
             y = dateTimeConverter(CranesDateFinder(CranesCountFinder2))
             z = CranesNumberFinder(CranesCountFinderNumber)
             z = int(z)
-            # if z is not None:
             if z > 25:
                 lst = [x, y, z]
                 print(lst)
                 with open('newData', 'a', newline='') as file:
                     writer = csv.writer(file)
                     writer.writerow(lst)
+                sqlQuery.addCranesData(x, y, z)
     except:
         print("Error")
 
@@ -65,13 +73,11 @@ def CranesNumberFinder(CranesCountFinderNumber):
 def CranesDateFinder(CranesCountFinder):
     CranesFindDate = CranesCountFinder.find('div', class_='message-attribution-main')
     CranesPostDate = CranesFindDate.find('time')['data-date-string']
-    # print("Date of the post: " + CranesPostDate)
     return CranesPostDate
 
 
 def CranesNickFinder(CranesCountFinder):
     CranesPostNickFinder = CranesCountFinder.find('a', class_='username').text
-    # print("This data is provided by: " + CranesPostNickFinder)
     return CranesPostNickFinder
 
 
@@ -80,7 +86,7 @@ def CraneGatherData():
     HtmlText = 'https://www.skyscrapercity.com/threads/wroc%C5%82aw-%C5%BBurawie-w-naszym-mie%C5%9Bcie.503734/page-'
     Repeat = True
     while Repeat:
-        for page in range(2, 184):
+        for page in range(2, 185):
             req = requests.get(HtmlText + str(page))
             soup = BeautifulSoup(req.text, 'lxml')
             CranesCountFinders = soup.find_all('article', class_='message message--post js-post js-inlineModContainer california-message')
@@ -108,5 +114,3 @@ Main()
 
 
 
-# if __name__ == "__main__":
-#     main()
